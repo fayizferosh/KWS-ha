@@ -15,7 +15,7 @@
 Comments
 -->
 
-> A simple and resourse efficient hardware accelerator designed specifically for Keyword Spotting (KWS) applications using log-mel spectrograms as the audio feature extractor.
+> A simple and resource efficient hardware accelerator designed specifically for Keyword Spotting (KWS) applications using log-mel spectrograms as the audio feature extractor.
 
 ## Architecture
 
