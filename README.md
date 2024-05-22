@@ -33,7 +33,53 @@ Comments
 4. Output:
     - Provide a mechanism to indicate the presence or absence of the keyword in the input audio stream.
     - Output a binary flag signal indicating the presence or absence of the keyword.
+  
+### Architecture Choice
 
+1. **Input Interface:**
+    - _Purpose:_ Handles incoming audio samples, ensuring they are correctly timed and formatted for processing.
+    - _Components:_
+        - _Sample buffer:_ Temporarily stores incoming audio samples.
+        - _Control logic:_ Manages the flow of samples based on system state and input validity. 
+2. **Pre-processing:**
+    - _Purpose:_ Applies necessary pre-processing steps to the audio samples, such as framing and windowing.
+    - _Components:_
+        - _Frame buffer:_ Segments the continuous audio stream into overlapping frames.
+        - _Window function:_ Applies a windowing function to each frame to minimize spectral leakage.
+3. **FFT Module:**
+    - _Purpose:_ Converts time-domain audio frames into frequency-domain representations using the Fast Fourier Transform (FFT).
+    - _Components:_
+        - _FFT processor:_ Computes the FFT of each windowed frame.
+4. **Mel Filterbank Processing:**
+    - _Purpose:_ Applies a set of Mel-scaled filters to the FFT output to extract frequency bands that mimic human auditory perception.
+    - _Components:_
+        - _Filterbank:_ A collection of band-pass filters corresponding to the Mel scale.
+        - _Energy computation:_ Calculates the energy in each Mel band.
+5. **Feature Extraction:**
+    - _Purpose:_ Optionally extracts additional features from the Mel spectrogram, such as MFCCs (Mel Frequency Cepstral Coefficients), if required by the keyword detection logic.
+    - _Components:_
+        - _Feature extractor:_ Calculates MFCCs or other features from the Mel spectrogram.
+6. **Dynamic Precision Adjustment:**
+    - _Purpose:_ Adjusts the precision of the FFT or Mel spectrogram data to optimize for computational efficiency or resource usage.
+    - _Components:_
+        - _Precision control:_ Dynamically adjusts data bit-width based on configurable criteria.
+7. **Logarithmic Compression:**
+    - _Purpose:_ Applies logarithmic compression to the Mel spectrogram to better match the non-linear perception of loudness in the human auditory system.
+    - _Components:_
+        - _Logarithmic function:_ Computes the logarithm of Mel spectrogram values.
+8. **Keyword Detection Logic:**
+    - _Purpose:_ Analyzes the log-Mel spectrogram (and possibly additional features) to detect the presence of specific keywords.
+    - _Components:_
+        - _Detection algorithm:_ Implements a simple thresholding or a more complex pattern matching/machine learning algorithm to identify keywords.
+        - _Keyword selector:_ Allows dynamic selection of the keyword(s) to be detected.
+9. **Output Interface:**
+    - _Purpose:_ Indicates the detection result, such as the presence of a keyword.
+    - Components:
+        - Detection output: Signals when a keyword has been detected.
+        - Status indicators: Provide additional information about the detection process, such as confidence levels.
+10. **Integration and Control (Top):**
+    - _System Controller:_ Coordinates the operation of all stages, managing state transitions, processing flow, and synchronization.
+    - _Clock and Reset Management:_ Ensures all components operate synchronously and can be reset to a known state.
 
 | :exclamation: Important Note            |
 |-----------------------------------------|
